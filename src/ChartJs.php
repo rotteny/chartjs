@@ -8,7 +8,10 @@ class ChartJs {
     public $backgroundColour    = "white"; // opt
     public $payload             = []; // required
 
-    public $PATH_CHARTJS        = "./index.js";
+    /**
+     * Localização da aplicação node que irá executar a geração do grafico
+     */
+    public $node_path           = "./index.js";
 
     public function __construct($params = []) {
         if(isset($params['width'])) {
@@ -23,19 +26,26 @@ class ChartJs {
         if(isset($params['payload'])) {
             $this->payload = $params['payload'];
         }
+        if(isset($params['node_path'])) {
+            $this->node_path = $params['node_path'];
+        }
 
         $this->isChartSet();
     }
     
     public function isChartSet() {
-        if(file_exists($this->PATH_CHARTJS)) {
+        if(file_exists($this->node_path)) {
            return true; 
         }
         throw new \Exception("O projeto node não foi encontrado no caminho informado.");
     }
 
-    public function setPayload($params) {
-        $this->payload = $params['payload'];
+    public function setNodePath($node_path) {
+        $this->node_path = $node_path;
+    }
+
+    public function setPayload($payload) {
+        $this->payload = $payload;
     }
 
     public function getChart() {
@@ -45,7 +55,7 @@ class ChartJs {
             'backgroundColour'  => $this->backgroundColour,
             'payload'           => (object)$this->payload
         ]);
-        $str_exec   = "node {$this->PATH_CHARTJS} '{$chart}'";
+        $str_exec   = "node {$this->node_path} '{$chart}'";
         
         $return     = exec($str_exec);
         $returnObj  = json_decode($return);
@@ -60,8 +70,8 @@ class ChartJs {
         return $returnObj->image;
     }
 
-    public static function renderChart($payload, $width = null, $height = null, $backgroundColour = null) {
-        $ChartJs = new self(compact('payload', 'width', 'height', 'backgroundColour'));
+    public static function renderChart($payload, $width = null, $height = null, $backgroundColour = null, $node_path = null) {
+        $ChartJs = new ChartJs(compact('payload', 'width', 'height', 'backgroundColour', 'node_path'));
         return $ChartJs->getChart();
     }
 }
