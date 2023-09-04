@@ -11,7 +11,7 @@ class ChartJs {
     /**
      * Localização da aplicação node que irá executar a geração do grafico
      */
-    public $node_path           = "./index.js";
+    public $node_path           = __DIR__ . "/../index.js";
 
     public function __construct($params = []) {
         if(isset($params['width'])) {
