@@ -1,4 +1,5 @@
 vendor
+tests
 .phpunit.result.cache
 teste.php
 node_modules
