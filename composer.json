@@ -1,0 +1,25 @@
+{
+    "name": "rotteny/chartjs",
+    "description": "Biblioteca para executar um gerador de grraficos node via linha de comandos",
+    "type": "library",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Rotteny\\Chartjs\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "George Rotteny",
+            "email": "grotteny@hotmail.com"
+        }
+    ],
+    "require-dev": {
+        "pestphp/pest": "^1.23"
+    },
+    "config": {
+        "allow-plugins": {
+            "pestphp/pest-plugin": true
+        }
+    }
+}
