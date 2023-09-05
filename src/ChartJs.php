@@ -36,8 +36,18 @@ class ChartJs {
      */
     public function isChartSet() {
         if(file_exists($this->node_path)) {
-           return true; 
+           // Testa se o index responde a chamada de teste corretamente
+           $str_exec   = "node {$this->node_path} teste";
+           
+           $return     = exec($str_exec);
+           $returnObj  = json_decode($return);
+   
+           if(isset($returnObj->status) && $returnObj->status) {
+               return true;
+           }
         }
+
+
         throw new \Exception("O projeto node não foi encontrado no caminho informado.");
     }
 
