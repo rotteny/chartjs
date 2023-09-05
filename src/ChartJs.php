@@ -29,10 +29,11 @@ class ChartJs {
         if(isset($params['node_path'])) {
             $this->node_path = $params['node_path'];
         }
-
-        $this->isChartSet();
     }
     
+    /**
+     * Verifica se o caminho para a aplicação em node foi informado corretamente
+     */
     public function isChartSet() {
         if(file_exists($this->node_path)) {
            return true; 
@@ -49,6 +50,8 @@ class ChartJs {
     }
 
     public function getChart() {
+        $this->isChartSet();
+
         $chart = json_encode([
             'width'             => $this->width,
             'height'            => $this->height,
@@ -65,7 +68,7 @@ class ChartJs {
                 throw new \Exception($returnObj->message);
             }
             throw new \Exception($return);
-        } 
+        }
 
         return $returnObj->image;
     }

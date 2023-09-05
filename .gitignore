@@ -7,3 +7,5 @@ package.json
 package-lock.json 
 composer.json
 composer.lock
+*.jpg
+*.jpeg
