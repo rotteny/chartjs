@@ -12,8 +12,8 @@ class ChartJs {
      * Requisição API
      */
     public $api_url             = 'https://sistema.safetydocs.com.br/nodechartjs/';
-    public $api_user            = 'safetydocs';
-    public $api_pass            = '33e3PY26zfXuKB4efQHGtW#V3BI8p1NMT0w1O3Ql1P9Oec@kB7Pg2MZGBtqFQjiVCQ';
+    public $api_user            = null;
+    public $api_pass            = null;
 
     /**
      * Localização da aplicação node que irá executar a geração do grafico
@@ -106,6 +106,9 @@ class ChartJs {
         }
 
         $ch     = curl_init( $url );
+        curl_setopt( $ch, CURLOPT_POST, true);
+        curl_setopt( $ch, CURLOPT_POSTFIELDS, $query);
+        curl_setopt( $ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt( $ch
                     , CURLOPT_HTTPHEADER
                     , [
@@ -117,7 +120,7 @@ class ChartJs {
         $httpCode   = curl_getinfo($ch, CURLINFO_HTTP_CODE);
         curl_close( $ch );
         if($httpCode != "200") {
-            throw new \Exception("Error ({$httpCode})");
+            throw new \Exception("Error ({$httpCode} - {$this->api_url}): {$return}");
         }
 
         $returnObj  = $this->validateObject($return);
@@ -135,13 +138,15 @@ class ChartJs {
         return $returnObj;
     }
 
-    public static function renderChart($payload, $width = null, $height = null, $backgroundColour = null, $node_path = null) {
-        $ChartJs = new ChartJs(compact('payload', 'width', 'height', 'backgroundColour', 'node_path'));
+    public static function renderChart(Array $chart, String $node_path) {
+        $ChartJs = new ChartJs(array_merge($chart, [ "node_path" => $node_path ]));
         return $ChartJs->getChart();
     }
 
-    public static function renderHttpChart($payload, $width = null, $height = null, $backgroundColour = null, $api_url = null, $api_user = null, $api_pass = null) {
-        $ChartJs = new ChartJs(compact('payload', 'width', 'height', 'backgroundColour', 'api_url', 'api_user', 'api_pass'));
+    public static function renderHttpChart(Array $chart, String $api_user = null, String $api_pass = null, String $api_url = null) {
+        $ChartJs = new ChartJs(array_merge($chart, [ "api_url" => $api_url
+                                                   , "api_user" => $api_user
+                                                   , "api_pass" => $api_pass ]));
         return $ChartJs->getHttpChart();
     }
 }
